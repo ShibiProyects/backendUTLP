@@ -1,11 +1,25 @@
 const express = require("express");
-const app = express();
-const port = 3000;
-const routes = require("./api/endPoints");
+
+//.env
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "./config/.env") });
+
+
 const cors = require("cors");
+
+//Swagger Import
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+const cookieParser = require("cookie-parser");
+
+const endPoints = require("./api/endPoints");
+
+//Start
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use(
   cors({
@@ -14,8 +28,33 @@ app.use(
   })
 );
 
-app.use("/", routes);
+app.use("/", endPoints);
 
-app.listen(port, () => {
-  console.log(`listening on port http://localhost:${port}`);
+//Swagger
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "API Documentation",
+      version: "1.0.0",
+    }, components: {
+      securitySchemes: {
+        cookieAuth: {
+          type: 'apiKey',
+          in: 'cookie',
+          name: 'x-auth' // Nombre de la cookie donde está el JWT
+        }
+      }
+    },
+  },
+  apis: ["./src/api/**.js"], // Ajusta el path de tus rutas aquí
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+//END-Swagger
+
+app.listen(process.env.SERVER_PORT, () => {
+  console.log(`listening on port http://localhost:${process.env.SERVER_PORT}`);
+  console.log(`swagger http://localhost:${process.env.SERVER_PORT}/api-docs`);
 });
