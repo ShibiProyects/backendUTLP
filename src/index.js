@@ -37,14 +37,15 @@ const swaggerOptions = {
     info: {
       title: "API Documentation",
       version: "1.0.0",
-    }, components: {
+    },
+    components: {
       securitySchemes: {
-        cookieAuth: {
-          type: 'apiKey',
-          in: 'cookie',
-          name: 'x-auth' // Nombre de la cookie donde está el JWT
-        }
-      }
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
     },
   },
   apis: ["./src/api/**.js"], // Ajusta el path de tus rutas aquí
