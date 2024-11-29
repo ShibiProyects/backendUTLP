@@ -25,7 +25,7 @@ JWT_SECRET=
 SERVER_PORT=
 ```
 
-> :book: Recuerde que el archivo debe ser creado en la carpeta config que deberia estar en src, si no se encuentra debe crearlo
+> :book: Recuerde que el archivo debe ser creado en la carpeta config que deberia estar en src, si no se encuentra la carpeta o el archivo debe crearlo
 
 :warning: Recuerde que no se almacena en el registro de git por motivos seguridad
 
