@@ -25,9 +25,9 @@ JWT_SECRET=
 SERVER_PORT=
 ```
 
-> :book: Recuerde que el archivo se encuentra temporalmente en la carpeta config
+> :book: Recuerde que el archivo se debe ser creado en la carpeta config que deberia estar en src, si no se encuentra debe crearla
 
-**Recuerde que no se almacena en el registro de git por motivos evidentes**
+:warning: Recuerde que no se almacena en el registro de git por motivos seguridad
 
 ## :construction_worker: Diagrama basico
 
@@ -48,6 +48,7 @@ sequenceDiagram
     RouteHandler-->>Server: Responde la petición
     Server-->>Client: Enviar respuesta HTTP
 ```
+
 ## JWT
 
 Sitio web donde puede debug el token, recuerde que para validar la autenticidad del token debe usar **JWT_SECRET** definida en el archivo **.env**
@@ -56,6 +57,7 @@ Sitio web donde puede debug el token, recuerde que para validar la autenticidad 
 > :book: **Recuerde que este token probablemente este vencido por la fecha de creacion.**
 
 JWT de ejemplo.
+
 ```text
 
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZXMiOlsiVGVhY2hlciIsIlN0dWRlbnQiXSwiaWF0IjoxNzMyNzQzMDk2LCJleHAiOjE3MzI3NTAyOTZ9.XbsGPeXW7vmg0vRdUac1HjBtJC975e2AOHty6FOSas8
