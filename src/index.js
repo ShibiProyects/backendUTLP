@@ -13,6 +13,8 @@ const swaggerUi = require("swagger-ui-express");
 const cookieParser = require("cookie-parser");
 
 const endPoints = require("./api/endPoints");
+//Global excepcion handler
+const globalErrorHandler = require("./middlewares/globalErrorHandler");
 
 //Start
 const app = express();
@@ -54,6 +56,8 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 //END-Swagger
+
+app.use(globalErrorHandler);
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`listening on port http://localhost:${process.env.SERVER_PORT}`);

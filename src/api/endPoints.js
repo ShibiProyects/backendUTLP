@@ -4,7 +4,7 @@ const router = express.Router();
 const { ping } = require("../controllers/pingController");
 const { register, login } = require("../controllers/auth/authController");
 const { getAllCourses, getByID } = require("../controllers/courses/coursesController");
-const { AuthenticationJWT } = require("../filters/authFilter");
+const { AuthenticationJWT } = require("../middlewares/authFilter");
 
 router.get("/ping", ping);
 

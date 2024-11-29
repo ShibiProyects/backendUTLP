@@ -1,6 +1,11 @@
 # :construction: :book: Notas de Backend
 
-> :construction_worker: :book: **Todavia no modifico la base de datos por lo que la estructura de las SQL no es valido o no es como se espera**
+> :construction_worker: :book: **Notas**
+>
+> - Recuerde usar **npm install** no se almacenan los archivos node_modules para evitar sobrecargar github con datos inútiles.
+> - Todavía no modifico la base de datos por lo que la estructura de las SQL no es valido o no es como se espera
+> - Falta ordenar el tema de las excepciones y el tratamiento global de estas, pensaba utilizar alguna librería para dejar registro de estas excepciones
+> - Algunos EndPoints aún no han sido implementados como tal y falta definir su documentación con **swagger**
 
 :books: Swagger se encuentra en la URL **/apis/api-docs**
 
@@ -20,9 +25,47 @@ JWT_SECRET=
 SERVER_PORT=
 ```
 
-> :book: Recuerde que el archivo se encuentra temporalmente en la carpeta config.
+> :book: Recuerde que el archivo se encuentra temporalmente en la carpeta config
+
+**Recuerde que no se almacena en el registro de git por motivos evidentes**
+
+## :construction_worker: Diagrama basico
+
+Esta bastante simplificado pero asi esta funcionando ahora mismo las rutas con authentificacion.
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    participant Middleware
+    participant RouteHandler
+
+    Client->>Server: Enviar petición HTTP
+    Server->>Middleware: Pasa al Middleware
+    Middleware->>Middleware: Valida la petición
+    Middleware-->>Server: Validación OK
+    Server->>RouteHandler: Llama al controlador de la ruta
+    RouteHandler-->>Server: Responde la petición
+    Server-->>Client: Enviar respuesta HTTP
+```
+## JWT
+
+Sitio web donde puede debug el token, recuerde que para validar la autenticidad del token debe usar **JWT_SECRET** definida en el archivo **.env**
+<https://jwt.io/>
+
+> :book: **Recuerde que este token probablemente este vencido por la fecha de creacion.**
+
+JWT de ejemplo.
+```text
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZXMiOlsiVGVhY2hlciIsIlN0dWRlbnQiXSwiaWF0IjoxNzMyNzQzMDk2LCJleHAiOjE3MzI3NTAyOTZ9.XbsGPeXW7vmg0vRdUac1HjBtJC975e2AOHty6FOSas8
+```
 
 ## :lion: Sql Utilizada
+
+Igualmente el ultimo update de la DB se encuentra en el archivo DB.sql (este archivo contiene algunos datos (estan al final))
+
+>:book: Falta crear un archivo seeds.sql que contenga datos de prueba.
 
 ```sql
 DROP DATABASE IF EXISTS courses;
@@ -420,15 +463,4 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-```
-
-### JWT
-
-<https://jwt.io/>
-
-JWT de ejemplo.
-
-```text
-
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZXMiOlsiVGVhY2hlciIsIlN0dWRlbnQiXSwiaWF0IjoxNzMyNzQzMDk2LCJleHAiOjE3MzI3NTAyOTZ9.XbsGPeXW7vmg0vRdUac1HjBtJC975e2AOHty6FOSas8
 ```
