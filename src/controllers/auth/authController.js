@@ -6,49 +6,6 @@ const jwt = require('jsonwebtoken');
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "./config/.env") });
 
-
-module.exports.register = (req, res) => {
-    const { firstName, lastName, email, username, password, confirmPassword } = req.body;
-
-    if (password != confirmPassword) {
-        return res
-            .status(422)
-            .json({ message: 'Password no coinciden.' });
-    }
-
-    const consult = `INSERT INTO user (first_name, last_name, email, username, password)
-                    VALUES (?, ?, ?, ?, ?);`;
-    const connection = createConnection();
-    try {
-        const hash = bcrypt.hashSync(password, 3);
-        connection.query(
-            consult,
-            [firstName, lastName, email, username, hash],
-            (err, result) => {
-                if (err) {
-                    if (err.code === "ER_DUP_ENTRY") {
-                        return res
-                            .status(400)
-                            .send({ message: "Email or username already exists." });
-                    }
-                    return res
-                        .status(500)
-                        .send({ message: "Internal server error", error: err });
-                }
-
-                return res.status(201).send({
-                    message: "User registered successfully",
-                });
-            }
-        );
-    } catch (err) {
-        console.error(err);
-        res.status(500).send({ message: "Internal server error" });
-    }
-};
-
-
-
 module.exports.login = async (req, res) => {
     const { email, password } = req.body;
 
