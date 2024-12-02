@@ -13,7 +13,7 @@ module.exports.login = async (req, res) => {
         return res.status(400).json({ message: 'Email y contraseña son requeridos.' });
     }
 
-    const query = 'SELECT user_id, password as hash,GROUP_CONCAT(role.name) AS ROLES FROM user INNER JOIN user_role ON user_role.user_user_id = user.user_id INNER JOIN role ON role.role_id = user_role.role_role_id WHERE email = ? GROUP BY user_id';
+    const query = 'SELECT user_id, password as hash,GROUP_CONCAT(role.name) AS ROLES FROM user INNER JOIN user_role ON user_role.user_user_id = user.user_id INNER JOIN role ON role.role_id = user_role.role_role_id WHERE email = ? GROUP BY `user`.user_id, `user`.`password`;';
     const connection = createConnection();
     try {
         // Consulta para obtener al usuario
