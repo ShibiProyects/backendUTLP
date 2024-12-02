@@ -39,13 +39,13 @@ DROP TABLE IF EXISTS `courses`.`course`;
 CREATE TABLE IF NOT EXISTS `courses`.`course` (
  `course_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
  `teacher_user_id` INT UNSIGNED NOT NULL,
-`course_status_id` INT(10) UNSIGNED NOT NULL,
+ `course_status_id` INT(10) UNSIGNED NOT NULL,
  `title` VARCHAR(255) NOT NULL,
  `description` TEXT NULL,
  `meet` TEXT NOT NULL,
  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON
-UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (`course_id`), INDEX `username_id` (`teacher_user_id` ASC) VISIBLE, CONSTRAINT `fk_course_user` FOREIGN KEY (`teacher_user_id`) REFERENCES `courses`.`user` (`user_id`) ON
+UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (`course_id`), INDEX `username_id` (`teacher_user_id` ASC) VISIBLE,INDEX `course_status_id` (`course_status_id` ASC) VISIBLE,CONSTRAINT `fk_course_course_status` FOREIGN KEY (`course_status_id`) REFERENCES `course_status` (`course_status_id`) ON DELETE RESTRICT,CONSTRAINT `fk_course_user` FOREIGN KEY (`teacher_user_id`) REFERENCES `courses`.`user` (`user_id`) ON
 DELETE RESTRICT
 ) ENGINE = InnoDB;
 -- -----------------------------------------------------
@@ -82,13 +82,10 @@ UPDATE NO ACTION
 DROP TABLE IF EXISTS `courses`.`course_status`;
 CREATE TABLE IF NOT EXISTS `courses`.`course_status` (
  `course_status_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
- `course_id` INT UNSIGNED NOT NULL,
  `name` VARCHAR(50) NOT NULL,
  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON
-UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (`course_status_id`), INDEX `fk_course_status_course1_idx` (`course_id` ASC) VISIBLE, CONSTRAINT `fk_course_status_course1` FOREIGN KEY (`course_id`) REFERENCES `courses`.`course` (`course_id`) ON
-DELETE NO ACTION ON
-UPDATE NO ACTION
+UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (`course_status_id`)
 ) ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `courses`.`accesibility_themes`
@@ -189,7 +186,11 @@ FROM course
 WHERE course.course_id = NEW.course_id AND course.teacher_user_id = NEW.user_id
 ) THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El usuario no puede ser estudiante porque ya es profesor de este curso.'; END IF; END $$
 DELIMITER ; SET SQL_MODE = @OLD_SQL_MODE; SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS; SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS;
+
+
 -- INSERTS
+
+
 INSERT INTO `courses`.`role`(`role_id`, `name`) VALUES (1, 'Administrator');
 INSERT INTO `courses`.`role`(`role_id`, `name`) VALUES (2, 'Teacher');
 INSERT INTO `courses`.`role`(`role_id`, `name`) VALUES (3, 'Student');
@@ -224,12 +225,21 @@ INSERT INTO `courses`.`user`(
  '$2b$04$pshU8fGJxhK1nZ8/jz8x3OvP7jBspj0L9YRm9jQVWVghri/.Nu1IG'
 );
 INSERT INTO `courses`.`user_role`(`user_user_id`, `role_role_id`) VALUES(1, 2);
---- falta el otro usuario añadido a role
 
-INSERT INTO `courses`.`course`(`teacher_user_id`,`title`,`meet`) VALUES(1,'SQL 0 a maestro','www.google.cl');
+--- course status
+INSERT INTO `courses`.course_status(`name`) VALUES("En desarrollo");
+INSERT INTO `courses`.course_status(`name`) VALUES("Terminado");
+INSERT INTO `courses`.course_status(`name`) VALUES("Pausado");
+INSERT INTO `courses`.course_status(`name`) VALUES("Cancelado");
 
+-- course
+INSERT INTO `courses`.`course`(`teacher_user_id`,`course_status_id`,`title`,`meet`) VALUES(1,2,'SQL 0 a maestro','www.google.cl');
+
+-- student_course status
 INSERT INTO `courses`.`student_course_status`(`name`)VALUES('En desarrollo');
 INSERT INTO `courses`.`student_course_status`(`name`)VALUES('Reprobado');
 INSERT INTO `courses`.`student_course_status`(`name`)VALUES('Aprobado');
 
-INSERT INTO `courses`.`student_has_course`(`status_id`,`course_id`,`user_id`)VALUES(1,3,2)
+-- student has course
+INSERT INTO `courses`.`student_has_course`(`status_id`,`course_id`,`user_id`)VALUES(1,1,2)
+
