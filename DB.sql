@@ -39,6 +39,7 @@ DROP TABLE IF EXISTS `courses`.`course`;
 CREATE TABLE IF NOT EXISTS `courses`.`course` (
  `course_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
  `teacher_user_id` INT UNSIGNED NOT NULL,
+`course_status_id` INT(10) UNSIGNED NOT NULL,
  `title` VARCHAR(255) NOT NULL,
  `description` TEXT NULL,
  `meet` TEXT NOT NULL,
@@ -162,8 +163,8 @@ DROP TRIGGER IF EXISTS `courses`.`course_AFTER_INSERT` $$ USE `courses` $$
 CREATE DEFINER = CURRENT_USER TRIGGER `courses`.`course_AFTER_INSERT` AFTER
 INSERT ON `course` FOR EACH ROW BEGIN IF EXISTS (
 SELECT 1
-FROM student_course
-WHERE student_course.course_id = NEW.course_id AND student_course.user_id = NEW.teacher_user_id
+FROM student_has_course
+WHERE student_has_course.course_id = NEW.course_id AND student_has_course.user_id = NEW.teacher_user_id
 ) THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El usuario no puede ser profesor porque ya está inscrito como estudiante en este curso.'; END IF; END;
 $$ USE `courses` $$
 DROP TRIGGER IF EXISTS `courses`.`course_AFTER_UPDATE` $$ USE `courses` $$
@@ -207,4 +208,28 @@ INSERT INTO `courses`.`user`(
  'juan.perez',
  '$2b$04$pshU8fGJxhK1nZ8/jz8x3OvP7jBspj0L9YRm9jQVWVghri/.Nu1IG'
 );
+INSERT INTO `courses`.`user`(
+ `user_id`,
+ `first_name`,
+ `last_name`,
+ `email`,
+ `username`,
+ `password`
+) VALUES (
+ 2,
+ 'Juan',
+ 'Pérez',
+ 'j2uan.perez@example.com',
+ 'j2uan.perez',
+ '$2b$04$pshU8fGJxhK1nZ8/jz8x3OvP7jBspj0L9YRm9jQVWVghri/.Nu1IG'
+);
 INSERT INTO `courses`.`user_role`(`user_user_id`, `role_role_id`) VALUES(1, 2);
+--- falta el otro usuario añadido a role
+
+INSERT INTO `courses`.`course`(`teacher_user_id`,`title`,`meet`) VALUES(1,'SQL 0 a maestro','www.google.cl');
+
+INSERT INTO `courses`.`student_course_status`(`name`)VALUES('En desarrollo');
+INSERT INTO `courses`.`student_course_status`(`name`)VALUES('Reprobado');
+INSERT INTO `courses`.`student_course_status`(`name`)VALUES('Aprobado');
+
+INSERT INTO `courses`.`student_has_course`(`status_id`,`course_id`,`user_id`)VALUES(1,3,2)
