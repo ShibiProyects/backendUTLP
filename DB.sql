@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `courses`.`user` (
  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON
 UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (`user_id`), UNIQUE INDEX `email` (`email` ASC) VISIBLE, UNIQUE INDEX `username` (`username` ASC) VISIBLE
-) ENGINE = InnoDB AUTO_INCREMENT = 4;
+) ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `courses`.`course`
 -- -----------------------------------------------------
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `courses`.`course` (
  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON
 UPDATE CURRENT_TIMESTAMP, PRIMARY KEY (`course_id`), INDEX `username_id` (`teacher_user_id` ASC) VISIBLE, CONSTRAINT `fk_course_user` FOREIGN KEY (`teacher_user_id`) REFERENCES `courses`.`user` (`user_id`) ON
 DELETE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 3;
+) ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `courses`.`student_course_status`
 -- -----------------------------------------------------
@@ -75,7 +75,7 @@ DELETE CASCADE, CONSTRAINT `student_course_ibfk_2` FOREIGN KEY (`user_id`) REFER
 DELETE CASCADE, CONSTRAINT `fk_student_has_course_student_course_status1` FOREIGN KEY (`status_id`) REFERENCES `courses`.`student_course_status` (`student_course_status_id`) ON
 DELETE NO ACTION ON
 UPDATE NO ACTION
-) ENGINE = InnoDB AUTO_INCREMENT = 4;
+) ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `courses`.`course_status`
 -- -----------------------------------------------------
