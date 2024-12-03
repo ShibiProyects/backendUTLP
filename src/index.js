@@ -13,7 +13,7 @@ const swaggerUi = require("swagger-ui-express");
 const cookieParser = require("cookie-parser");
 
 const endPoints = require("./api/endPoints");
-//Global excepcion handler
+//Global exception handler
 const globalErrorHandler = require("./middlewares/globalErrorHandler");
 
 //Start
