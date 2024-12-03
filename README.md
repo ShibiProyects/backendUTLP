@@ -6,6 +6,9 @@
 > - Todavía no modifico la base de datos por lo que la estructura de las SQL no es válido o no es como se espera
 > - Falta ordenar el tema de las excepciones y el tratamiento global de estas, pensaba utilizar alguna librería para dejar registro de estas excepciones
 > - Algunos EndPoints aún no han sido implementados como tal y falta definir su documentación con **swagger**
+> - No toda la documentación de swagger es exacta :eye:
+> - Falta arreglar algunas peticiones que devuelven códigos **HTTP** incorrectos
+> - Los **update** están marcados como **PATCH** pero aun no se implementa correctamente el parcheo parcial de los datos.
 
 :books: Swagger se encuentra en la URL **/apis/api-docs**
 

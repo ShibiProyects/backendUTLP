@@ -4,7 +4,7 @@ const router = express.Router();
 const {ping} = require("../controllers/pingController");
 const {login} = require("../controllers/auth/authController");
 const {create, getAllUserCoursesByID, getAllMyUserCourses} = require("../controllers/account/accountController");
-const {getAllCourses, getByID} = require("../controllers/course/courseController");
+const {getAllCourses, getByID, createCourse, updateCourse} = require("../controllers/course/courseController");
 const {
     getAllCourseStatus,
     getCourseStatusByID,
@@ -486,5 +486,164 @@ router.post("/courses/status", authenticationJWT, createCourseStatus)
  *                   example: "Error interno del servidor."
  */
 router.patch("/courses/status/:id", authenticationJWT, updateCourseStatus)
+
+/**
+ * @swagger
+ * /courses:
+ *   post:
+ *     security:
+ *        - bearerAuth: []
+ *     summary: Crear un nuevo curso
+ *     description: Crea un nuevo curso en el sistema con los detalles proporcionados.
+ *     tags:
+ *       - Courses
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               teacher_id:
+ *                 type: integer
+ *                 example: 1
+ *                 description: ID del profesor que crea el curso.
+ *               course_status:
+ *                 type: integer
+ *                 example: 1
+ *                 description: ID del estado del curso.
+ *               title:
+ *                 type: string
+ *                 example: "Introducción a la programación"
+ *                 description: Título del curso.
+ *               description:
+ *                 type: string
+ *                 example: "Un curso básico sobre conceptos de programación."
+ *                 description: Descripción detallada del curso.
+ *               link_meet:
+ *                 type: string
+ *                 example: "https://meet.example.com/course123"
+ *                 description: Enlace a la reunión en línea para el curso.
+ *             required:
+ *               - teacher_id
+ *               - course_status
+ *               - title
+ *               - link_meet
+ *     responses:
+ *       201:
+ *         description: Course successfully created.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Success create course"
+ *       422:
+ *         description: Validation error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unprocessable Entity"
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error"
+ */
+router.post("/courses", authenticationJWT, createCourse)
+
+/**
+ * @swagger
+ * /courses/{id}:
+ *   patch:
+ *     security:
+ *         - bearerAuth: []
+ *     summary: Actualizar un curso existente
+ *     description: Actualiza los detalles de un curso existente en el sistema.
+ *     tags:
+ *       - Courses
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del curso que se desea actualizar.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               teacher_id:
+ *                 type: integer
+ *                 example: 1
+ *                 description: ID del profesor que actualiza el curso.
+ *               course_status:
+ *                 type: integer
+ *                 example: 2
+ *                 description: Nuevo ID del estado del curso.
+ *               title:
+ *                 type: string
+ *                 example: "Programación avanzada"
+ *                 description: Nuevo título del curso.
+ *               description:
+ *                 type: string
+ *                 example: "Un curso avanzado sobre conceptos de programación."
+ *                 description: Nueva descripción detallada del curso.
+ *               link_meet:
+ *                 type: string
+ *                 example: "https://meet.example.com/course456"
+ *                 description: Nuevo enlace a la reunión en línea para el curso.
+ *             required:
+ *               - teacher_id
+ *               - course_status
+ *               - title
+ *               - link_meet
+ *     responses:
+ *       200:
+ *         description: Course successfully updated.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Success update course"
+ *       422:
+ *         description: Validation error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unprocessable Entity"
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error"
+ */
+router.patch("/courses/:id", authenticationJWT, updateCourse)
 module.exports = router;
 
