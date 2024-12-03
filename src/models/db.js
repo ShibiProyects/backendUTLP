@@ -5,8 +5,8 @@ require("dotenv").config({ path: path.resolve(__dirname, "../config/.env") });
 
 function createConnection(){
   const connection = mysql2.createConnection({
-    host: process.env.DB_HOST,
     port: process.env.DB_PORT,
+    host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
