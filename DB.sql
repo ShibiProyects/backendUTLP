@@ -226,11 +226,11 @@ INSERT INTO `courses`.`user`(
 );
 INSERT INTO `courses`.`user_role`(`user_user_id`, `role_role_id`) VALUES(1, 2);
 
---- course status
-INSERT INTO `courses`.course_status(`name`) VALUES("En desarrollo");
-INSERT INTO `courses`.course_status(`name`) VALUES("Terminado");
-INSERT INTO `courses`.course_status(`name`) VALUES("Pausado");
-INSERT INTO `courses`.course_status(`name`) VALUES("Cancelado");
+-- course status
+INSERT INTO `courses`.course_status(`name`) VALUES('En desarrollo');
+INSERT INTO `courses`.course_status(`name`) VALUES('Terminado');
+INSERT INTO `courses`.course_status(`name`) VALUES('Pausado');
+INSERT INTO `courses`.course_status(`name`) VALUES('Cancelado');
 
 -- course
 INSERT INTO `courses`.`course`(`teacher_user_id`,`course_status_id`,`title`,`meet`) VALUES(1,2,'SQL 0 a maestro','www.google.cl');
