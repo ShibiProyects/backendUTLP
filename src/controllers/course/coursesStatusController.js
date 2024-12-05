@@ -13,7 +13,7 @@ module.exports.getAllCourseStatus = async (req, res) => {
             if (result.length === 0) {
                 return res
                     .status(404)
-                    .json({ error: "Not found" });
+                    .json({ message: "Not found" });
             }
             res.json(result);
         });
@@ -50,7 +50,7 @@ module.exports.getCourseStatusByID = (req, res) => {
             if (result.length === 0) {
                 return res
                     .status(404)
-                    .json({ error: "Not found" });
+                    .json({ message: "Not found" });
             }
             res.json(result);
         });

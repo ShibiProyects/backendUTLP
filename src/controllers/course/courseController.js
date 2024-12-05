@@ -71,7 +71,7 @@ module.exports.createCourse = (req, res) => {
     }
 
     if (teacher_id === 0 || course_status === 0) {
-        return res.status(422).json({message: "Unprocessable Entity"});
+        return res.status(422).json({error: "Unprocessable Entity"});
     }
 
     const consult = 'INSERT INTO `courses`. course(teacher_user_id, course_status_id, title, description, meet) VALUE (?,?,?,?,?);';
@@ -104,7 +104,7 @@ module.exports.updateCourse = (req, res) => {
     }
 
     if (teacher_id === 0 || course_status === 0 || id === 0) {
-        return res.status(422).json({message: "Unprocessable Entity"});
+        return res.status(422).json({error: "Unprocessable Entity"});
     }
 
     const consult = 'UPDATE `courses`.course SET teacher_user_id=?, course_status_id=?,title=?,description=?,meet=? WHERE course_id = ?;';

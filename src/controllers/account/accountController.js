@@ -67,7 +67,7 @@ function getUserCourses(req,res,id){
             if (result.length === 0) {
                 return res
                     .status(404)
-                    .json({ error: "Not found" });
+                    .json({ message: "Not found"  });
             }
             res.json(result);
         });
