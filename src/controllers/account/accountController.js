@@ -55,7 +55,7 @@ function getUserCourses(req,res,id){
         return res.status(404).json({ message: "Not found" });
     }
 
-    const consult = "SELECT * FROM `courses`.`student_has_course` WHERE user_id = ?;";
+    const consult = 'SELECT course.title ,student_status.`name`, course. AS student_status FROM `courses`.`student_has_course` AS student INNER JOIN `courses`.`course` ON course.course_id = student.course_id INNER JOIN `courses`.`student_course_status` AS student_status ON student_status.student_course_status_id = student.status_id WHERE user_id = ?;';
     const connection = createConnection(); // Crea una nueva conexión
 
     try {
