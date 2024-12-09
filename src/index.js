@@ -12,7 +12,6 @@ const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const cookieParser = require("cookie-parser");
 
-const endPoints = require("./api/endPoints");
 //Global exception handler
 const globalErrorHandler = require("./middlewares/globalErrorHandler");
 
@@ -30,7 +29,14 @@ app.use(
   })
 );
 
-app.use("/", endPoints);
+const routes = [
+    require("././routes/auth/authRouter"),
+    require("././routes/course/courseRouter"),
+    require("././routes/role/roleRouter"),
+    require("././routes/user/userRouter"),
+]
+
+routes.forEach(route => app.use("/",route));
 
 //Swagger
 const swaggerOptions = {
@@ -50,7 +56,7 @@ const swaggerOptions = {
       },
     },
   },
-  apis: ["./src/api/**.js"], // Ajusta el path de tus rutas aquí
+  apis: ["./src/routes/**/**.js"], // Ajusta el path de tus rutas aquí
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
