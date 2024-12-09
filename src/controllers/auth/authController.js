@@ -30,7 +30,7 @@ module.exports.login = async (req, res) => {
                     .json({ error: 'Usuario o contraseña incorrectos.' });
             }
             //temp remove role need add 
-            //Le digo que tiene el nombre password en la DB y en la consulta pero que resuelva como hash
+            //Le digo que tiene el nombre password en la DB y en la consulta, pero que resuelva como hash
             const { user_id, hash, ROLES } = results[0];
 
             console.log(results);
