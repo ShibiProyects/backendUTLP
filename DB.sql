@@ -313,6 +313,60 @@ VALUES (2,
         'j2uan.perez@example.com',
         'j2uan.perez',
         '$2b$04$pshU8fGJxhK1nZ8/jz8x3OvP7jBspj0L9YRm9jQVWVghri/.Nu1IG');
+INSERT INTO `courses`.`user`(`user_id`,
+                             `first_name`,
+                             `last_name`,
+                             `email`,
+                             `username`,
+                             `password`)
+VALUES (3,
+        'Juan',
+        'Pérez',
+        'j2uan.4244perez@example.com',
+        'j2ua4n.perez',
+        '$2b$04$pshU8fGJxhK1nZ8/jz8x3OvP7jBspj0L9YRm9jQVWVghri/.Nu1IG');
+INSERT INTO `courses`.`user`(`user_id`,
+                             `first_name`,
+                             `last_name`,
+                             `email`,
+                             `username`,
+                             `password`)
+VALUES (4,
+        'Juan',
+        'Pérez',
+        'j2uan.pere342z@example.com',
+        'j2ua3n.perez',
+        '$2b$04$pshU8fGJxhK1nZ8/jz8x3OvP7jBspj0L9YRm9jQVWVghri/.Nu1IG');
+INSERT INTO `courses`.`user`(`user_id`, `first_name`, `last_name`, `email`, `username`, `password`)
+VALUES (5, 'María', 'González', 'maria.gonzalez@example.com', 'maria.gonzalez', '$2b$04$testpasswordhash');
+
+INSERT INTO `courses`.`user`(`user_id`, `first_name`, `last_name`, `email`, `username`, `password`)
+VALUES (6, 'Carlos', 'Ramírez', 'carlos.ramirez@example.com', 'carlos.ramirez', '$2b$04$testpasswordhash');
+
+INSERT INTO `courses`.`user`(`user_id`, `first_name`, `last_name`, `email`, `username`, `password`)
+VALUES (7, 'Ana', 'López', 'ana.lopez@example.com', 'ana.lopez', '$2b$04$testpasswordhash');
+
+INSERT INTO `courses`.`user`(`user_id`, `first_name`, `last_name`, `email`, `username`, `password`)
+VALUES (8, 'Luis', 'Martínez', 'luis.martinez@example.com', 'luis.martinez', '$2b$04$testpasswordhash');
+
+INSERT INTO `courses`.`user`(`user_id`, `first_name`, `last_name`, `email`, `username`, `password`)
+VALUES (9, 'Sofía', 'Hernández', 'sofia.hernandez@example.com', 'sofia.hernandez', '$2b$04$testpasswordhash');
+
+INSERT INTO `courses`.`user`(`user_id`, `first_name`, `last_name`, `email`, `username`, `password`)
+VALUES (10, 'Fernando', 'Castro', 'fernando.castro@example.com', 'fernando.castro', '$2b$04$testpasswordhash');
+
+INSERT INTO `courses`.`user`(`user_id`, `first_name`, `last_name`, `email`, `username`, `password`)
+VALUES (11, 'Lucía', 'Domínguez', 'lucia.dominguez@example.com', 'lucia.dominguez', '$2b$04$testpasswordhash');
+
+INSERT INTO `courses`.`user`(`user_id`, `first_name`, `last_name`, `email`, `username`, `password`)
+VALUES (12, 'Diego', 'Suárez', 'diego.suarez@example.com', 'diego.suarez', '$2b$04$testpasswordhash');
+
+INSERT INTO `courses`.`user`(`user_id`, `first_name`, `last_name`, `email`, `username`, `password`)
+VALUES (13, 'Paula', 'Vargas', 'paula.vargas@example.com', 'paula.vargas', '$2b$04$testpasswordhash');
+
+INSERT INTO `courses`.`user`(`user_id`, `first_name`, `last_name`, `email`, `username`, `password`)
+VALUES (14, 'Javier', 'Ortiz', 'javier.ortiz@example.com', 'javier.ortiz', '$2b$04$testpasswordhash');
+
 INSERT INTO `courses`.`user_role`(`user_user_id`, `role_role_id`)
 VALUES (1, 2);
 
@@ -329,7 +383,7 @@ VALUES ('Cancelado');
 -- course
 INSERT INTO `courses`.`course`(`teacher_user_id`, `course_status_id`, `title`, `meet`)
 VALUES (1, 2, 'SQL 0 a maestro', 'www.google.cl');
-
+INSERT INTO `courses`.`course`(`teacher_user_id`,`course_status_id`,`title`,`meet`) VALUES(2,3,'Python de novato a Maestro','www.google.cl');
 -- student_course status
 INSERT INTO `courses`.`student_course_status`(`name`)
 VALUES ('En desarrollo');
@@ -340,5 +394,38 @@ VALUES ('Aprobado');
 
 -- student has course
 INSERT INTO `courses`.`student_has_course`(`status_id`, `course_id`, `user_id`)
-VALUES (1, 1, 2)
+VALUES (1, 1, 2);
 
+INSERT INTO `courses`.`student_has_course`(`status_id`, `course_id`, `user_id`)
+VALUES (1, 1, 3);
+INSERT INTO `courses`.`student_has_course`(`status_id`, `course_id`, `user_id`)
+VALUES (1, 1, 4);
+INSERT INTO `courses`.`student_has_course`(`status_id`, `course_id`, `user_id`)
+VALUES (1, 1, 5);
+
+INSERT INTO `courses`.`student_has_course`(`status_id`, `course_id`, `user_id`)
+VALUES (2, 1, 6);
+
+INSERT INTO `courses`.`student_has_course`(`status_id`, `course_id`, `user_id`)
+VALUES (3, 2, 7);
+
+INSERT INTO `courses`.`student_has_course`(`status_id`, `course_id`, `user_id`)
+VALUES (1, 2, 8);
+
+INSERT INTO `courses`.`student_has_course`(`status_id`, `course_id`, `user_id`)
+VALUES (2, 1, 9);
+
+INSERT INTO `courses`.`student_has_course`(`status_id`, `course_id`, `user_id`)
+VALUES (3, 2, 10);
+
+INSERT INTO `courses`.`student_has_course`(`status_id`, `course_id`, `user_id`)
+VALUES (1, 1, 11);
+
+INSERT INTO `courses`.`student_has_course`(`status_id`, `course_id`, `user_id`)
+VALUES (2, 2, 12);
+
+INSERT INTO `courses`.`student_has_course`(`status_id`, `course_id`, `user_id`)
+VALUES (3, 1, 13);
+
+INSERT INTO `courses`.`student_has_course`(`status_id`, `course_id`, `user_id`)
+VALUES (1, 2, 14);
