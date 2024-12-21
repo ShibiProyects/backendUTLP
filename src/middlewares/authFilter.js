@@ -24,9 +24,17 @@ module.exports.authenticationJWT = async (req, res, next) => {
             return res.status(401).json({error: 'Credenciales no proporcionadas. Autenticación requerida.'});
         }
 
-        // Si el token es válido, puedes guardar la información del usuario en el objeto req para uso posterior
-        req.user = jwt.verify(token, process.env.JWT_SECRET); // Esto puede incluir información como el id del usuario, roles, etc.
-        next();
+        jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
+            if (err) {
+                if (err.name === 'TokenExpiredError') {
+                    return res.status(401).json({error: "Token expirado."});
+                } else {
+                    return res.status(401).json({error: 'Token invalido.'});
+                }
+            }
+            req.user = decode;
+            next();
+        });
     } catch (err) {
         next(err);
     }

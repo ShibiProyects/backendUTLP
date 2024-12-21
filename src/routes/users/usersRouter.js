@@ -1,21 +1,20 @@
 const express = require("express");
 const {
-    getAllTeacherCoursesByID,
     getAllMyUserCourses,
     getAllUserCoursesByID,
     create
-} = require("../../controllers/account/accountController");
+} = require("../../controllers/users/usersController");
 const {authenticationJWT} = require("../../middlewares/authFilter");
 const router = express.Router();
 
 /**
  * @swagger
- * /register:
+ * /users/register:
  *   post:
  *     summary: Registrar un nuevo usuario
  *     description: Registra un nuevo usuario en la base de datos y devuelve un token JWT si el registro es exitoso.
  *     tags:
- *       - Account
+ *       - User
  *     requestBody:
  *       required: true
  *       content:
@@ -46,7 +45,7 @@ const router = express.Router();
  *         description: Registro exitoso
  *         headers:
  *           Set-Cookie:
- *             description: JWT para autenticación..
+ *             description: JWT para autenticación.
  *             schema:
  *               type: string
  *               example: x-auth=jwt.token.here; Path=/; HttpOnly; SameSite=Lax; Max-Age=7200
@@ -92,14 +91,14 @@ router.post("/register", authenticationJWT, create);
 
 /**
  * @swagger
- * /user/{id}/courses:
+ * /users/{id}/courses:
  *   get:
  *     security:
  *       - bearerAuth: []
  *     summary: Obtiene todos los cursos relacionados a un usuario
  *     description: Obtiene todos los cursos relacionados a un usuario en particular utilizando su identificador
  *     tags:
- *       - Courses
+ *       - User
  *     parameters:
  *       - name: id
  *         in: path
@@ -124,54 +123,18 @@ router.post("/register", authenticationJWT, create);
  *       500:
  *         description: Error en el servidor
  */
-router.get("/user/:id/courses", authenticationJWT, getAllUserCoursesByID);
+router.get("/:id/courses", authenticationJWT, getAllUserCoursesByID);
 
 /**
  * @swagger
- * /user/courses:
+ * /users/courses:
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Obtiene todos los cursos relacionados a tu usuario
- *     description: Obtiene todos los cursos relacionados a tu usuario
+ *     summary: Obtiene todos los cursos relacionados con tu usuario
+ *     description: Obtiene todos los cursos relacionados con tu usuario
  *     tags:
- *       - Courses
- *     responses:
- *       200:
- *         description: Lista de cursos
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 additionalProperties: true  # Esto indica que los objetos pueden tener propiedades dinámicas
- *       400:
- *         description: Bad Request
- *       404:
- *         description: Not Found
- *       500:
- *         description: Error en el servidor
- */
-router.get("/user/courses", authenticationJWT, getAllMyUserCourses);
-
-/**
- * @swagger
- * /teacher/{id}/courses:
- *   get:
- *     security:
- *       - bearerAuth: []
- *     summary: Obtiene todos los cursos relacionados a un profesor
- *     description: Obtiene todos los cursos relacionados a un profesor en particular utilizando su identificador
- *     tags:
- *       - Courses
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         schema:
- *           type: integer
- *         description: Identificador del curso
+ *       - User
  *     responses:
  *       200:
  *         description: Lista de cursos
@@ -189,6 +152,6 @@ router.get("/user/courses", authenticationJWT, getAllMyUserCourses);
  *       500:
  *         description: Error en el servidor
  */
-router.get("/teacher/:id/courses", authenticationJWT, getAllTeacherCoursesByID);
+router.get("/courses", authenticationJWT, getAllMyUserCourses);
 
 module.exports = router;

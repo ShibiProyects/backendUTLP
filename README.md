@@ -71,3 +71,13 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZXMiOlsiVGVhY2hlciIsIlN0dWR
 Igualmente, el último update de la DB se encuentra en el archivo DB.sql (este archivo contiene algunos datos (están al final))
 
 >:book: Falta crear un archivo seeds.sql que contenga datos de prueba.
+
+falta añadir restricción de único en course status
+
+### Arquitectura
+
+Se utiliza una arquitectura de capas.
+Controlador es el encargado de responder peticiones y derivar datos a los servicios.
+Servicio encargado de validar reglas de negocio, validar datos obtenidos de db.
+Repositorio encargado de la data almacenada.
+

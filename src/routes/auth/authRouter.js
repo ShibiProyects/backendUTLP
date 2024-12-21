@@ -4,7 +4,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /login:
+ * /auth/login:
  *   post:
  *     summary: Login inicia session.
  *     description: Inicia session y devuelve un token JWT, si las credenciales son correctas.
@@ -28,7 +28,7 @@ const router = express.Router();
  *         description: Registro exitoso
  *         headers:
  *           Set-Cookie:
- *             description: JWT para autenticación..
+ *             description: JWT para autenticación.
  *             schema:
  *               type: string
  *               example: x-auth=jwt.token.here; Path=/; HttpOnly; SameSite=Lax; Max-Age=7200
@@ -39,10 +39,20 @@ const router = express.Router();
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Registro exitoso."
+ *                   example: "Successful login"
  *                 token:
  *                   type: string
- *                   example: "jwt.token.here" # Token en formato JWT
+ *                   example: "jwt.token.here" # Token in JWT format
+ *       400:
+ *         description: Bad Params
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Bad Request: Missing Email"
  *       422:
  *         description: Error en el registro por datos incorrectos o duplicados
  *         content:
@@ -52,15 +62,9 @@ const router = express.Router();
  *               properties:
  *                 error:
  *                   type: string
- *                   examples:
- *                     passwordsDoNotMatch:
- *                       summary: Contraseñas no coinciden
- *                       value: "Las contraseñas no coinciden. Intente nuevamente."
- *                     emailExists:
- *                       summary: Correo duplicado
- *                       value: "Este correo electrónico ya está registrado."
+ *                   example: Email or passwords do not match.
  *       500:
- *         description: Error interno del servidor
+ *         description: Internal server error
  *         content:
  *           application/json:
  *             schema:
@@ -68,7 +72,7 @@ const router = express.Router();
  *               properties:
  *                 error:
  *                   type: string
- *                   example: "Error interno del servidor."
+ *                   example: "Internal server error"
  */
 router.post("/login", login);
 
