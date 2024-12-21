@@ -2,16 +2,6 @@ const UserService = require("../../services/UserService");
 const ResultStatusEnum = require("../../library/resultStatusEnum");
 
 
-module.exports.getAllUserCoursesByID = async (req, res, next) => {
-    const id = Number(req.params.id);
-    await getUserCourses(req, res, next, id);
-};
-
-module.exports.getAllMyUserCourses = async (req, res, next) => {
-    const id = req.user?.id;
-    await getUserCourses(req, res, next, id);
-};
-
 async function getUserCourses(req, res, next, id) {
     if (!Number.isInteger(id)) {
         return res.status(400).json({error: "Bad Request"});
@@ -36,6 +26,16 @@ async function getUserCourses(req, res, next, id) {
         next(err);
     }
 }
+
+module.exports.getAllUserCoursesByID = async (req, res, next) => {
+    const id = Number(req.params.id);
+    await getUserCourses(req, res, next, id);
+};
+
+module.exports.getAllMyUserCourses = async (req, res, next) => {
+    const id = req.user?.id;
+    await getUserCourses(req, res, next, id);
+};
 
 module.exports.create = async (req, res, next) => {
     const {firstName, lastName, email, username, password, confirmPassword} = req.body;

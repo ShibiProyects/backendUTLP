@@ -7,6 +7,8 @@ module.exports.getAllRoles = async (req, res, next) => {
         const result = await roleService.getAll();
         if (result.status === ResultStatusEnum.OK) {
             return res.status(200).json(result.value);
+        }else{
+            next(new Error(`Unexpected result status: ${result.status}`));
         }
     } catch (err) {
         next(err);
@@ -29,6 +31,8 @@ module.exports.getRoleById = async (req, res, next) => {
         const result = await roleService.getById(id);
         if (result.status === ResultStatusEnum.OK) {
             return res.status(200).json(result.value);
+        }else{
+            next(new Error(`Unexpected result status: ${result.status}`));
         }
     } catch (err) {
         next(err);
@@ -100,6 +104,8 @@ module.exports.deleteRole = async (req, res, next) => {
         const result = await roleService.getAll();
         if (result.status === ResultStatusEnum.OK) {
             return res.status(200).json(result.value);
+        }else{
+            next(new Error(`Unexpected result status: ${result.status}`));
         }
     } catch (err) {
         next(err);

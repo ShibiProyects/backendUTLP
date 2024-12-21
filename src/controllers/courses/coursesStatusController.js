@@ -7,6 +7,8 @@ module.exports.getAllCourseStatus = async (req, res, next) => {
         const result = await coursesStatusService.getAll();
         if (result.status === ResultStatusEnum.OK) {
             return res.status(200).json(result.value);
+        }else{
+            next(new Error(`Unexpected result status: ${result.status}`));
         }
     } catch (err) {
         next(err);
@@ -27,8 +29,13 @@ module.exports.getCourseStatusByID = async (req, res, next) => {
     try {
         const coursesStatusService = new CourseStatusService();
         const result = await coursesStatusService.getById(id);
-        if (result.status === ResultStatusEnum.OK) {
-            return res.status(200).json(result.value);
+        switch (result.status) {
+            case ResultStatusEnum.OK:
+                return res.status(200).json({message: result.value});
+            case ResultStatusEnum.NOT_FOUND:
+                return res.status(404).json({error: result.error});
+            default:
+                next(new Error(`Unexpected result status: ${result.status}`));
         }
     } catch (err) {
         next(err);
@@ -47,6 +54,8 @@ module.exports.createCourseStatus = async (req, res, next) => {
         const result = await coursesStatusService.create(name);
         if (result.status === ResultStatusEnum.OK) {
             return res.status(200).json({message: result.value});
+        }else{
+            next(new Error(`Unexpected result status: ${result.status}`));
         }
     } catch (err) {
         next(err);
@@ -72,6 +81,8 @@ module.exports.updateCourseStatus = async (req, res, next) => {
         const result = await coursesStatusService.update(name, id);
         if (result.status === ResultStatusEnum.OK) {
             return res.status(200).json({message: result.value});
+        }else{
+            next(new Error(`Unexpected result status: ${result.status}`));
         }
     } catch (err) {
         next(err);

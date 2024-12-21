@@ -44,13 +44,22 @@ class UserRepository {
                 if (err) {
                     return reject(err);
                 }
-                resolve(results[0] || null);
+                resolve(results);
             })
         })
     }
 
-    async getByIdTeacherId() {
+    async getByIdTeacherId(id) {
         const query = 'SELECT course.title ,student_status.`name` AS student_status,cs.name AS `course status` FROM `courses`.`student_has_course` AS student INNER JOIN `courses`.`course` ON course.course_id = student.course_id INNER JOIN `courses`.`course_status` AS cs ON cs.course_status_id = `courses`.course .course_status_id INNER JOIN `courses`.`student_course_status` AS student_status ON student_status.student_course_status_id = student.status_id WHERE `courses`.`course`.teacher_user_id = ?;';
+        return new Promise((resolve, reject) => {
+            this.connection.query(query, [id], (err, results) => {
+
+                if (err) {
+                    return reject(err);
+                }
+                resolve(results);
+            })
+        })
     }
 
     async create(firstName, lastName, email, username, hash) {

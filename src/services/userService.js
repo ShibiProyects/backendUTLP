@@ -1,5 +1,6 @@
 const UserRepository = require("../repositories/userRepository");
 const bcrypt = require('bcrypt');
+const {Result} = require("../library/result");
 
 class UserService {
     constructor() {
@@ -8,11 +9,44 @@ class UserService {
 
     async getById(id) {
         const result = await this.userRepository.getById(id);
+
+        if (!result) {
+            throw new Error("Unexpected result");
+        }
+
+        if (result.length === 0) {
+            return Result.notFound("Not Found");
+        }
+
+        return Result.success(result);
     }
 
     async getByIdWithCourses(id) {
         const result = await this.userRepository.getByIdWithCourses(id);
 
+        if (!result) {
+            throw new Error("Unexpected result");
+        }
+
+        if (result.length === 0) {
+            return Result.notFound("Not Found");
+        }
+
+        return Result.success(result);
+    }
+
+    async getByIdTeacherId(id) {
+        const result = await this.userRepository.getByIdTeacherId(id);
+
+        if (!result) {
+            throw new Error("Unexpected result");
+        }
+
+        if (result.length === 0) {
+            return Result.notFound("Not Found");
+        }
+
+        return Result.success(result);
     }
 
     async create(firstName, lastName, email, username, password) {

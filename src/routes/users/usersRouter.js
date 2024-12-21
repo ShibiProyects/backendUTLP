@@ -11,6 +11,8 @@ const router = express.Router();
  * @swagger
  * /users/register:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Registrar un nuevo usuario
  *     description: Registra un nuevo usuario en la base de datos y devuelve un token JWT si el registro es exitoso.
  *     tags:
