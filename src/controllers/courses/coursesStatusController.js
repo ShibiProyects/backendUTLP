@@ -18,12 +18,8 @@ module.exports.getAllCourseStatus = async (req, res, next) => {
 module.exports.getCourseStatusByID = async (req, res, next) => {
     const id = Number(req.params.id);
 
-    if (!Number.isInteger(id)) {
+    if (!Number.isInteger(id) || id <= 0) {
         return res.status(400).json({error: "Bad Request"});
-    }
-
-    if (id === 0) {
-        return res.status(404).json({message: "Not found"});
     }
 
     try {
@@ -65,13 +61,10 @@ module.exports.createCourseStatus = async (req, res, next) => {
 module.exports.updateCourseStatus = async (req, res, next) => {
     const id = Number(req.params.id);
     const name = req.body?.name;
-    if (!Number.isInteger(id)) {
+    if (!Number.isInteger(id) || id <= 0) {
         return res.status(400).json({error: "Bad Request"});
     }
 
-    if (id === 0) {
-        return res.status(404).json({message: "Not found"});
-    }
     if (!name || name.trim().length === 0) {
         return res.status(422).json({error: "Bad Request"});
     }

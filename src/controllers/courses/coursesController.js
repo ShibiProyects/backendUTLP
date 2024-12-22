@@ -19,7 +19,7 @@ module.exports.getAllCourses = async (req, res, next) => {
 module.exports.getByID = async (req, res, next) => {
     const id = Number(req.params.id);
 
-    if (!Number.isInteger(id) || id === 0) {
+    if (!Number.isInteger(id) || id <= 0) {
         return res.status(400).json({error: "Bad Request"});
     }
 
@@ -45,17 +45,11 @@ module.exports.createCourse = async (req, res,next) => {
     if(!title || !course_status || !title || !link_meet){
         return res.status(400).json({error: "Bad Request"});
     }
-
+    if(!Number.isInteger(teacher_id) || teacher_id <= 0|| !Number.isInteger(title) || title <= 0) {
+        return res.status(400).json({error: "Bad Request"});
+    }
     if (!title || title.trim().length === 0 || !link_meet || link_meet.trim().length === 0) {
-        return res.status(422).json({error: "Unprocessable Entity"});
-    }
-
-    if (!Number.isInteger(teacher_id) || !Number.isInteger(course_status)) {
-        return res.status(422).json({error: "Unprocessable Entity"});
-    }
-
-    if (teacher_id === 0 || course_status === 0) {
-        return res.status(422).json({error: "Unprocessable Entity"});
+        return res.status(422).json({error: "Bad Request"});
     }
 
     try {
@@ -76,17 +70,15 @@ module.exports.updateCourse = async (req, res,next) => {
     const {teacher_id, course_status, title, description = null, link_meet} = req.body;
     const id = Number(req.params.id);
 
+    if(!Number.isInteger(teacher_id) || teacher_id <= 0|| !Number.isInteger(title) || title <= 0 || !Number.isInteger(id) || id <= 0) {
+        return res.status(400).json({error: "Bad Request"});
+    }
+
     if (!title || title.trim().length === 0 || !link_meet || link_meet.trim().length === 0) {
         return res.status(422).json({error: "Unprocessable Entity"});
     }
 
-    if (!Number.isInteger(teacher_id) || !Number.isInteger(course_status) || !Number.isInteger(id)) {
-        return res.status(422).json({error: "Unprocessable Entity"});
-    }
 
-    if (teacher_id === 0 || course_status === 0 || id === 0) {
-        return res.status(422).json({error: "Unprocessable Entity"});
-    }
 
     try {
         const courseService = new CourseService();
