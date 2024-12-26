@@ -1,95 +1,79 @@
 const CourseService = require("../../services/courseService");
 const ResultStatusEnum = require("../../library/resultStatusEnum");
+const validateIntegerNumber = require("../../Helper/validateIntegerHelper");
+const validateSchema = require("../../validations/validateSchema");
+const courseSchema = require("../../validations/controller/courseSchema");
 
 module.exports.getAllCourses = async (req, res, next) => {
-    try {
-        const courseService = new CourseService();
-        const result = await courseService.getAll();
-        switch (result.status) {
-            case ResultStatusEnum.OK:
-                return res.status(200).json(result.value);
-            default:
-                next(new Error(`Unexpected result status: ${result.status}`));
-        }
-    } catch (err) {
-        next(err);
+    const courseService = new CourseService();
+    const result = await courseService.getAll();
+    switch (result.status) {
+        case ResultStatusEnum.OK:
+            return res.status(200).json(result.value);
+        default:
+            next(new Error(`Unexpected result status: ${result.status}`));
     }
 };
 
 module.exports.getByID = async (req, res, next) => {
     const id = Number(req.params.id);
 
-    if (!Number.isInteger(id) || id <= 0) {
-        return res.status(400).json({error: "Bad Request"});
+    if (validateIntegerNumber(id)) {
+        return res.status(400).json({error: "invalid number"});
     }
 
-    try {
-        const courseService = new CourseService();
-        const result = await courseService.getById(id);
-        switch (result.status) {
-            case ResultStatusEnum.OK:
-                return res.status(200).json(result.value);
-            case ResultStatusEnum.NOT_FOUND:
-                return res.status(404).json({error: result.error});
-            default:
-                next(new Error(`Unexpected result status: ${result.status}`));
-        }
-    } catch (err) {
-        next(err);
+    const courseService = new CourseService();
+    const result = await courseService.getById(id);
+    switch (result.status) {
+        case ResultStatusEnum.OK:
+            return res.status(200).json(result.value);
+        case ResultStatusEnum.NOT_FOUND:
+            return res.status(404).json({error: result.error});
+        default:
+            next(new Error(`Unexpected result status: ${result.status}`));
     }
 };
 
-module.exports.createCourse = async (req, res,next) => {
-    const {teacher_id, course_status, title, description = null, link_meet} = req.body;
+module.exports.createCourse = async (req, res, next) => {
+    const validationResult = validateSchema(courseSchema, req.body);
 
-    if(!title || !course_status || !title || !link_meet){
-        return res.status(400).json({error: "Bad Request"});
-    }
-    if(!Number.isInteger(teacher_id) || teacher_id <= 0|| !Number.isInteger(title) || title <= 0) {
-        return res.status(400).json({error: "Bad Request"});
-    }
-    if (!title || title.trim().length === 0 || !link_meet || link_meet.trim().length === 0) {
-        return res.status(422).json({error: "Bad Request"});
+    if (validationResult.errors) {
+        return res.status(400).json({errors: validationResult.errors});
     }
 
-    try {
-        const courseService = new CourseService();
-        const result = await courseService.create(teacher_id, course_status, title, description, link_meet);
-        switch (result.status) {
-            case ResultStatusEnum.OK:
-                return res.status(200).json({message: result.value});
-            default:
-                next(new Error(`Unexpected result status: ${result.status}`));
-        }
-    } catch (err) {
-        next(err);
+    const { teacherId, courseStatus, title, description, linkMeet } = validationResult.value;
+
+    const courseService = new CourseService();
+    const result = await courseService.create(teacherId, courseStatus, title, description, linkMeet);
+    switch (result.status) {
+        case ResultStatusEnum.OK:
+            return res.status(200).json({message: result.value});
+        default:
+            next(new Error(`Unexpected result status: ${result.status}`));
     }
 }
 
-module.exports.updateCourse = async (req, res,next) => {
-    const {teacher_id, course_status, title, description = null, link_meet} = req.body;
+module.exports.updateCourse = async (req, res, next) => {
     const id = Number(req.params.id);
 
-    if(!Number.isInteger(teacher_id) || teacher_id <= 0|| !Number.isInteger(title) || title <= 0 || !Number.isInteger(id) || id <= 0) {
-        return res.status(400).json({error: "Bad Request"});
+    if (validateIntegerNumber(id)) {
+        return res.status(400).json({error: "invalid number"});
     }
 
-    if (!title || title.trim().length === 0 || !link_meet || link_meet.trim().length === 0) {
-        return res.status(422).json({error: "Unprocessable Entity"});
+    const validationResult = validateSchema(courseSchema, req.body);
+
+    if (validationResult.errors) {
+        return res.status(400).json({errors: validationResult.errors});
     }
 
+    const { teacherId, courseStatus, title, description, linkMeet } = validationResult.value;
 
-
-    try {
-        const courseService = new CourseService();
-        const result = await courseService.update(teacher_id, course_status, title, description, link_meet, id);
-        switch (result.status) {
-            case ResultStatusEnum.OK:
-                return res.status(200).json({message: result.value});
-            default:
-                next(new Error(`Unexpected result status: ${result.status}`));
-        }
-    } catch (err) {
-        next(err);
+    const courseService = new CourseService();
+    const result = await courseService.update(teacherId, courseStatus, title, description, linkMeet, id);
+    switch (result.status) {
+        case ResultStatusEnum.OK:
+            return res.status(200).json({message: result.value});
+        default:
+            next(new Error(`Unexpected result status: ${result.status}`));
     }
 }

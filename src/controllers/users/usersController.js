@@ -1,14 +1,12 @@
 const UserService = require("../../services/UserService");
 const ResultStatusEnum = require("../../library/resultStatusEnum");
-
+const validateIntegerNumber = require("../../Helper/validateIntegerHelper");
+const validateSchema = require("../../validations/validateSchema");
+const userSchema = require("../../validations/controller/userSchema");
 
 async function getUserCourses(req, res, next, id) {
-    if (!Number.isInteger(id)) {
-        return res.status(400).json({error: "Bad Request"});
-    }
-
-    if (id === 0) {
-        return res.status(404).json({message: "Not found"});
+    if (validateIntegerNumber(id)) {
+        return res.status(400).json({error: "invalid number"});
     }
 
     try {
@@ -33,22 +31,20 @@ module.exports.getAllUserCoursesByID = async (req, res, next) => {
 };
 
 module.exports.getAllMyUserCourses = async (req, res, next) => {
-    const id = req.user?.id;
+    const id = Number(req.user?.id);
     await getUserCourses(req, res, next, id);
 };
 
-module.exports.create = async (req, res, next) => {
-    const {firstName, lastName, email, username, password, confirmPassword} = req.body;
+module.exports.getUserProfile = async (req, res, next) => {
+    const id = Number(req.params.id);
 
-    if (password !== confirmPassword) {
-        return res
-            .status(422)
-            .json({message: 'Password and confirm password not equal.'});
+    if (validateIntegerNumber(id)) {
+        return res.status(400).json({error: "invalid number"});
     }
 
     try {
         const userService = new UserService();
-        const result = await userService.create(firstName, lastName, email, username, password);
+        const result = await userService.getUserProfile(id);
         switch (result.status) {
             case ResultStatusEnum.OK:
                 return res.status(200).json(result.value);
@@ -60,17 +56,49 @@ module.exports.create = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
+}
+
+module.exports.create = async (req, res, next) => {
+    const validationResult = validateSchema(userSchema, req.body);
+
+    if (validationResult.errors) {
+        return res.status(400).json({errors: validationResult.errors});
+    }
+
+    const {firstName, lastName, email, username, password} = validationResult.value;
+
+    try {
+        const userService = new UserService();
+        const result = await userService.create(firstName, lastName, email, username, password);
+        switch (result.status) {
+            case ResultStatusEnum.OK:
+                return res.status(200).json(result.value);
+            case ResultStatusEnum.NOT_FOUND:
+                return res.status(404).json({error: result.error});
+            case ResultStatusEnum.FAILURE:
+                return res.status(422).json({error: result.error});
+            default:
+                next(new Error(`Unexpected result status: ${result.status}`));
+        }
+    } catch (err) {
+        next(err);
+    }
 };
 
 module.exports.update = async (req, res, next) => {
-    const {firstName, lastName, email, username, password, confirmPassword} = req.body;
     const id = Number(req.params.id);
 
-    if (password !== confirmPassword) {
-        return res
-            .status(422)
-            .json({message: 'Password and confirm password not equal.'});
+    if (validateIntegerNumber(id)) {
+        return res.status(400).json({error: "invalid number"});
     }
+
+    const validationResult = validateSchema(userSchema, req.body);
+
+    if (validationResult.errors) {
+        return res.status(400).json({errors: validationResult.errors});
+    }
+
+    const {firstName, lastName, email, username, password} = validationResult.value;
 
     try {
         const userService = new UserService();
@@ -88,15 +116,15 @@ module.exports.update = async (req, res, next) => {
     }
 }
 
+/*
 module.exports.addUserRole = async (req, res, next) => {
     const userId = Number(req.params.userId);
     const roleId = Number(req.params.roleId);
 
-    // Validación
-    if (!Number.isInteger(userId) || userId <= 0 || !Number.isInteger(roleId) || roleId <= 0) {
-        return res.status(400).json({error: "Bad Request"});
+    if (validateIntegerNumber(userId) || roleId) {
+        return res.status(400).json({error: "invalid number"});
     }
-    /*
+
     const query = `INSERT INTO user_role(user_user_id, role_role_id)
                    VALUES (?, ?);`;
 
@@ -108,5 +136,6 @@ module.exports.addUserRole = async (req, res, next) => {
         console.error('Error al ejecutar la consulta:', err);
         return res.status(500).json({error: 'Internal Server Error'});
     }
-     */
 }
+*/
+

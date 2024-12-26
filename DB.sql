@@ -337,6 +337,7 @@ VALUES (4,
         'j2uan.pere342z@example.com',
         'j2ua3n.perez',
         '$2b$04$pshU8fGJxhK1nZ8/jz8x3OvP7jBspj0L9YRm9jQVWVghri/.Nu1IG');
+
 INSERT INTO `courses`.`user`(`user_id`, `first_name`, `last_name`, `email`, `username`, `password`)
 VALUES (5, 'María', 'González', 'maria.gonzalez@example.com', 'maria.gonzalez', '$2b$04$testpasswordhash');
 

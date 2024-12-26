@@ -9,7 +9,8 @@
 > - No toda la documentación de swagger es exacta :eye:
 > - Falta arreglar algunas peticiones que devuelven códigos **HTTP** incorrectos
 > - Los **update** están marcados como **PATCH** pero aun no se implementa correctamente el parcheo parcial de los datos.
-
+> - Cambios en los campos solicitados en las solicitudes post y patch en el controlador courses
+    > teacherId, course_status, title, description, linkMeet
 :books: Swagger se encuentra en la URL **/apis/api-docs**
 
 :warning: :books: **Recuerde configurar las variables de entorno**

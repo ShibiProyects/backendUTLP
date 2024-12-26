@@ -27,7 +27,7 @@ class Result {
      * @returns {Result}
      */
     static failure(error) {
-        return new Result(resultStatusEnum.ERROR, null, error);
+        return new Result(resultStatusEnum.FAILURE, null, error);
     }
 
     /**

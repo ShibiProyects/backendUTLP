@@ -2,7 +2,7 @@ const express = require("express");
 const {
     getAllMyUserCourses,
     getAllUserCoursesByID,
-    create
+    create, getUserProfile
 } = require("../../controllers/users/usersController");
 const {authenticationJWT} = require("../../middlewares/authFilter");
 const router = express.Router();
@@ -156,4 +156,75 @@ router.get("/:id/courses", authenticationJWT, getAllUserCoursesByID);
  */
 router.get("/courses", authenticationJWT, getAllMyUserCourses);
 
+/**
+ * @swagger
+ * /users/profile/{id}:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Obtiene todos los datos relacionados a un usuario
+ *     tags:
+ *       - User
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Identificador del usuario
+ *     responses:
+ *       200:
+ *         description: Información del usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 fullName:
+ *                   type: string
+ *                   example: "Juan Pérez"
+ *                 email:
+ *                   type: string
+ *                   example: "j2uan.perez@example.com"
+ *                 username:
+ *                   type: string
+ *                   example: "j2uan.perez"
+ *                 rol:
+ *                   type: string
+ *                   nullable: true
+ *                   example: "teacher"
+ *                 courses:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       studentCourseStatus:
+ *                         type: string
+ *                         example: "En desarrollo"
+ *                       teachers:
+ *                         type: string
+ *                         example: "Juan Pérez"
+ *                       descriptions:
+ *                         type: string
+ *                         nullable: true
+ *                         example: null
+ *                       titles:
+ *                         type: string
+ *                         example: "SQL 0 a maestro"
+ *                       meet:
+ *                         type: string
+ *                         example: "www.google.cl"
+ *                       courseStatus:
+ *                         type: string
+ *                         example: "Suspendido"
+ *                   example: []
+ *       400:
+ *         description: Bad Request
+ *       404:
+ *         description: Not Found
+ *       500:
+ *         description: Error en el servidor
+ */
+
+router.get('/profile/:id', authenticationJWT, getUserProfile);
 module.exports = router;

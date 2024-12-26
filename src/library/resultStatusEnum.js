@@ -10,6 +10,7 @@ const resultStatusEnum = {
     FORBIDDEN: "FORBIDDEN",
     VALIDATION_ERROR: "VALIDATION_ERROR",
     CONFLICT: "CONFLICT",
+    FAILURE: "FAILURE",
 };
 
 module.exports = resultStatusEnum;

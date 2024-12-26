@@ -1,6 +1,7 @@
 const UserRepository = require("../repositories/userRepository");
 const bcrypt = require('bcrypt');
 const {Result} = require("../library/result");
+const HashHelper = require('../Helper/HashHelper');
 
 class UserService {
     constructor() {
@@ -49,27 +50,84 @@ class UserService {
         return Result.success(result);
     }
 
-    async create(firstName, lastName, email, username, password) {
-        const hash = bcrypt.hashSync(password, 3);
+    async getUserProfile(id) {
+        const result = await this.userRepository.getUserProfile(id);
 
-        if (!hash || hash.trim().length === 0) {
-            throw new Error('Hash is empty, null, or contains only whitespace');
+        if (!result || !result.fullname) {
+            return Result.notFound("Not Found");
+        }
+        let courses = []
+
+        if(result.studentCourseStatus){
+            let studentCourseStatus = result.studentCourseStatus?.split(', ');
+            let teachers = result.teacher?.split(', ');
+            let descriptions = result.description ? result.description.split(', ') : [];
+            let titles = result.title?.split(', ');
+            let meet = result.meet?.split(', ');
+            let courseStatus = result.courseStatus?.split(', ');
+
+
+            studentCourseStatus?.forEach((element, index) => {
+                courses.push({
+                    studentCourseStatus: studentCourseStatus[index],
+                    teachers: teachers[index],
+                    descriptions: descriptions[index] ?? null,
+                    titles: titles[index],
+                    meet: meet[index],
+                    courseStatus: courseStatus[index]
+                });
+            })
         }
 
-        const result = await this.userRepository.create(firstName, lastName, email, username, hash);
+        let finalResult = {
+            fullName: result.fullname,
+            email: result.email,
+            username: result.username,
+            rol: result.rol,
+            courses: courses
+        };
+        return Result.success(finalResult);
+    }
+
+    async create(firstName, lastName, email, username, password) {
+        const hash = await HashHelper(password);
+
+        try {
+            const result = await this.userRepository.create(firstName, lastName, email, username, hash);
+
+            if (!result) {
+                throw new Error("Unexpected result");
+            }
+
+            return Result.success(result);
+        } catch (err) {
+            if (err.sqlState === '23000') {
+                const field = err.sqlMessage.match(/for key '(.+)'/)?.[1];
+                return Result.failure(`error duplicated field ${field}`);
+            }
+            throw err;
+        }
     }
 
     async update(firstName, lastName, email, username, password, id) {
-        const hash = bcrypt.hashSync(password, 3);
+        const hash = await HashHelper(password);
 
-        if (!hash || hash.trim().length === 0) {
-            throw new Error('Hash is empty, null, or contains only whitespace');
+        try {
+            const result = await this.userRepository.update(firstName, lastName, email, username, hash, id);
+
+            if (!result) {
+                throw new Error("Unexpected result");
+            }
+
+            return Result.success(result);
+        } catch (err) {
+            if (err.sqlState === '23000') {
+                const field = err.sqlMessage.match(/for key '(.+)'/)?.[1];
+                return Result.failure(`error duplicated field ${field}`);
+            }
+            throw err;
         }
-
-        const result = await this.userRepository.update(firstName, lastName, email, username, hash, id);
-
     }
-
 }
 
 module.exports = UserService;

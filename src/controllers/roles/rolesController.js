@@ -1,113 +1,96 @@
 const ResultStatusEnum = require("../../library/resultStatusEnum");
 const RoleService = require("../../services/roleService");
+const validateIntegerNumber = require("../../Helper/validateIntegerHelper");
+const roleSchema = require("../../validations/controller/roleSchema");
+const validateSchema = require("../../validations/validateSchema");
 
 module.exports.getAllRoles = async (req, res, next) => {
-    try {
-        const roleService = new RoleService();
-        const result = await roleService.getAll();
-        if (result.status === ResultStatusEnum.OK) {
-            return res.status(200).json(result.value);
-        }else{
-            next(new Error(`Unexpected result status: ${result.status}`));
-        }
-    } catch (err) {
-        next(err);
+    const roleService = new RoleService();
+    const result = await roleService.getAll();
+
+    if (result.status === ResultStatusEnum.OK) {
+        return res.status(200).json(result.value);
+    } else {
+        next(new Error(`Unexpected result status: ${result.status}`));
     }
 }
 
 module.exports.getRoleById = async (req, res, next) => {
     const id = Number(req.params.id);
 
-    if (!Number.isInteger(id)) {
-        return res.status(400).json({error: "Bad Request"});
+    if (validateIntegerNumber(id)) {
+        return res.status(400).json({error: "invalid number"});
     }
 
-    if (id === 0) {
-        return res.status(404).json({message: "Not found"});
-    }
-
-    try {
-        const roleService = new RoleService();
-        const result = await roleService.getById(id);
-        if (result.status === ResultStatusEnum.OK) {
-            return res.status(200).json(result.value);
-        }else{
-            next(new Error(`Unexpected result status: ${result.status}`));
-        }
-    } catch (err) {
-        next(err);
+    const roleService = new RoleService();
+    const result = await roleService.getById(id);
+    if (result.status === ResultStatusEnum.OK) {
+        return res.status(200).json(result.value);
+    } else {
+        next(new Error(`Unexpected result status: ${result.status}`));
     }
 }
 
 module.exports.createRole = async (req, res, next) => {
-    const name = req.body?.name;
+    const validationResult = validateSchema(roleSchema, req.body);
 
-    if (!name) {
-        return res.status(400).json({error: "Bad Request: Missing name"});
+    if (validationResult.errors) {
+        return res.status(400).json({errors: validationResult.errors});
     }
 
-    try {
-        const roleService = new RoleService();
-        const result = await roleService.create(name);
-        switch (result.status) {
-            case ResultStatusEnum.OK:
-                return res.status(200).json({message: result.value});
-            case ResultStatusEnum.VALIDATION_ERROR:
-                return res.status(422).json({errors: result.error});
-            default:
-                next(new Error(`Unexpected result status: ${result.status}`));
-        }
+    const {name} = validationResult.value;
 
-    } catch (err) {
-        next(err);
+    const roleService = new RoleService();
+    const result = await roleService.create(name);
+    switch (result.status) {
+        case ResultStatusEnum.OK:
+            return res.status(200).json({message: result.value});
+        case ResultStatusEnum.VALIDATION_ERROR:
+            return res.status(422).json({errors: result.error});
+        default:
+            next(new Error(`Unexpected result status: ${result.status}`));
     }
 };
 
 module.exports.updateRole = async (req, res, next) => {
-    const name = req.body?.name;
     const id = Number(req.params.id);
 
-    if (!Number.isInteger(id) || id <= 0) {
-        return res.status(400).json({error: "Bad Request: Invalid ID"});
+    if (validateIntegerNumber(id)) {
+        return res.status(400).json({error: "invalid number"});
     }
 
-    if (!name) {
-        return res.status(400).json({error: "Bad Request: Missing name"});
+    const validationResult = validateSchema(roleSchema, req.body);
+
+    if (validationResult.errors) {
+        return res.status(400).json({errors: validationResult.errors});
     }
 
-    try {
-        const roleService = new RoleService();
-        const result = await roleService.update(name, id);
-        switch (result.status) {
-            case ResultStatusEnum.OK:
-                return res.status(200).json({message: result.value});
-            case ResultStatusEnum.VALIDATION_ERROR:
-                return res.status(422).json({errors: result.error});
-            default:
-                next(new Error(`Unexpected result status: ${result.status}`));
-        }
-    } catch (err) {
-        next(err);
+    const {name} = validationResult.value;
+
+    const roleService = new RoleService();
+    const result = await roleService.update(name, id);
+    switch (result.status) {
+        case ResultStatusEnum.OK:
+            return res.status(200).json({message: result.value});
+        case ResultStatusEnum.VALIDATION_ERROR:
+            return res.status(422).json({errors: result.error});
+        default:
+            next(new Error(`Unexpected result status: ${result.status}`));
     }
 }
 
-
 module.exports.deleteRole = async (req, res, next) => {
-    let id = Number(req.params.id);
+    const id = Number(req.params.id);
 
-    if (!Number.isInteger(id) || id <= 0) {
-        return res.status(400).json({error: "Bad Request: Invalid ID"});
+    if (validateIntegerNumber(id)) {
+        return res.status(400).json({error: "invalid number"});
     }
 
-    try {
-        const roleService = new RoleService();
-        const result = await roleService.getAll();
-        if (result.status === ResultStatusEnum.OK) {
-            return res.status(200).json(result.value);
-        }else{
-            next(new Error(`Unexpected result status: ${result.status}`));
-        }
-    } catch (err) {
-        next(err);
+    const roleService = new RoleService();
+    const result = await roleService.getAll();
+    if (result.status === ResultStatusEnum.OK) {
+        return res.status(200).json(result.value);
+    } else {
+        next(new Error(`Unexpected result status: ${result.status}`));
     }
 }

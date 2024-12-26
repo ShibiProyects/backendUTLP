@@ -15,12 +15,6 @@ class RoleService {
     }
 
     async create(name) {
-        name = name.trim();
-
-        if (name.length === 0) {
-            return Result.validationError("Empty name");
-        }
-
         const result = await this.roleRepository.create(name);
         if (!result) {
             throw new Error("Unexpected result");
@@ -29,12 +23,6 @@ class RoleService {
     }
 
     async update(name, id) {
-        name = name.trim();
-
-        if (name.length === 0) {
-            return Result.validationError("Empty name");
-        }
-
         const result = await this.roleRepository.update(name, id);
 
         if (!result) {

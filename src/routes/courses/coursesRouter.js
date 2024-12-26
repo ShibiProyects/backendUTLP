@@ -152,14 +152,14 @@ router.get("/:id", authenticationJWT, getByID);
  *           schema:
  *             type: object
  *             properties:
- *               teacher_id:
+ *               teacherId:
  *                 type: integer
  *                 example: 1
- *                 description: ID del profesor que crea el curso.
- *               course_status:
+ *                 description: Id del profesor que crea el curso.
+ *               courseStatus:
  *                 type: integer
  *                 example: 1
- *                 description: ID del estado del curso.
+ *                 description: Id del estado del curso.
  *               title:
  *                 type: string
  *                 example: "Introducción a la programación"
@@ -168,15 +168,15 @@ router.get("/:id", authenticationJWT, getByID);
  *                 type: string
  *                 example: "Un curso básico sobre conceptos de programación."
  *                 description: Descripción detallada del curso.
- *               link_meet:
+ *               linkMeet:
  *                 type: string
  *                 example: "https://meet.example.com/course123"
  *                 description: Enlace a la reunión en línea para el curso.
  *             required:
- *               - teacher_id
- *               - course_status
+ *               - teacherId
+ *               - courseStatus
  *               - title
- *               - link_meet
+ *               - linkMeet
  *     responses:
  *       201:
  *         description: Course successfully created.
@@ -235,11 +235,11 @@ router.post("/", authenticationJWT, createCourse);
  *           schema:
  *             type: object
  *             properties:
- *               teacher_id:
+ *               teacherId:
  *                 type: integer
  *                 example: 1
  *                 description: Id del profesor que actualiza el curso.
- *               course_status:
+ *               courseStatus:
  *                 type: integer
  *                 example: 2
  *                 description: Nuevo ID del estado del curso.
@@ -251,15 +251,15 @@ router.post("/", authenticationJWT, createCourse);
  *                 type: string
  *                 example: "Un curso avanzado sobre conceptos de programación."
  *                 description: Nueva descripción detallada del curso.
- *               link_meet:
+ *               linkMeet:
  *                 type: string
  *                 example: "https://meet.example.com/course456"
  *                 description: Nuevo enlace a la reunión en línea para el curso.
  *             required:
- *               - teacher_id
- *               - course_status
+ *               - teacherId
+ *               - courseStatus
  *               - title
- *               - link_meet
+ *               - linkMeet
  *     responses:
  *       200:
  *         description: Course successfully updated.
